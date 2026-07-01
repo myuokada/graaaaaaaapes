@@ -1,0 +1,349 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Kredo Connect | Community Feed</title>
+<!-- Google Fonts: Hanken Grotesk & Geist -->
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Geist:wght@400;600&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error": "#ba1a1a",
+                    "surface-bright": "#f8f9ff",
+                    "on-primary-fixed": "#00174b",
+                    "secondary-fixed-dim": "#ffb95f",
+                    "surface": "#f8f9ff",
+                    "surface-container-low": "#eff4ff",
+                    "on-tertiary": "#ffffff",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "on-surface": "#0b1c30",
+                    "surface-dim": "#cbdbf5",
+                    "error-container": "#ffdad6",
+                    "primary-fixed": "#dbe1ff",
+                    "on-tertiary-fixed": "#002113",
+                    "on-secondary": "#ffffff",
+                    "inverse-primary": "#b4c5ff",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "on-surface-variant": "#434655",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-high": "#dce9ff",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "surface-variant": "#d3e4fe",
+                    "surface-container": "#e5eeff",
+                    "secondary-container": "#fea619",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed": "#6ffbbe",
+                    "tertiary-container": "#007d55",
+                    "outline": "#737686",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "surface-tint": "#0053db",
+                    "on-secondary-fixed-variant": "#653e00",
+                    "on-tertiary-container": "#bdffdb",
+                    "inverse-surface": "#213145",
+                    "tertiary": "#006242",
+                    "surface-container-highest": "#d3e4fe",
+                    "on-secondary-container": "#684000",
+                    "primary-container": "#2563eb",
+                    "background": "#f8f9ff",
+                    "on-background": "#0b1c30",
+                    "outline-variant": "#c3c6d7",
+                    "secondary": "#855300",
+                    "primary": "#004ac6",
+                    "on-error": "#ffffff",
+                    "secondary-fixed": "#ffddb8",
+                    "on-secondary-fixed": "#2a1700",
+                    "inverse-on-surface": "#eaf1ff",
+                    "on-primary": "#ffffff",
+                    "on-primary-container": "#eeefff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.5rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "16px",
+                    "margin-desktop": "32px",
+                    "xl": "48px",
+                    "lg": "24px",
+                    "max-width": "1280px",
+                    "sm": "8px",
+                    "xs": "4px",
+                    "margin-mobile": "16px",
+                    "base": "4px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Hanken Grotesk"],
+                    "label-caps": ["Geist"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "body-sm": ["Hanken Grotesk"],
+                    "body-lg": ["Hanken Grotesk"],
+                    "code-snippet": ["Geist"],
+                    "headline-lg-mobile": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "code-snippet": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        .active-chip {
+            background-color: #004ac6; /* Primary */
+            color: #ffffff;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-lg min-h-screen pb-24">
+<!-- Top Navigation Shell -->
+<header class="bg-surface dark:bg-surface-dim shadow-sm w-full top-0 sticky z-50 flex items-center justify-between px-margin-mobile h-16">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim hover:opacity-80 transition-opacity active:scale-95 transition-transform cursor-pointer" data-icon="menu">menu</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">Kredo Plus</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="relative hover:opacity-80 transition-opacity active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border-2 border-primary-fixed">
+<img class="w-full h-full object-cover" data-alt="A clean professional headshot of a friendly Filipino student wearing a casual blue polo shirt." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwFSypiq4JfCNkL2k0qWPhG7AEVowsJKrF96GyhkRz7uPWXtgmPFtAabUSh7LC1-Ejg1B6AdCTi77DhBzIm1Kb8MaJFXKJff607UL5M9ACnO58HmY0PVETZD2P_quLBffHNIlHcTkuwQFJ67FvmfCRDj4Juqxkh1Z2oYiVW55Xy-rSfAyu8dCNC7IVaoieXTAs3O-Pv9cuynCjR5uImj_pPcfqmvFQnWDs-lvSjHOXMcPnKoRrXfDarWjAeAOjbZeiCPIFuh6RgzI">
+</div>
+</div>
+</header>
+<main class="max-w-max-width mx-auto">
+<!-- Hero Section / Contextual Banner -->
+<section class="px-margin-mobile py-lg">
+<div class="relative h-40 w-full rounded-xl overflow-hidden shadow-lg group transition-all duration-700 opacity-100 translate-y-0">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A vibrant co-working space." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAzc0GM9-TaDKV8sLYP6_pZ4zn6h27xd9qk_Et9iw47uT-sRSvEbxCGcNzSKNOtB1g_G8I7cD8EDDV0XrRvumjfkTDg3QhkRsrOrWN4xcz1xDe_c3WO4F8HbJ050IeZFd-ShFoDaZg3kp__0BqUqOqBhyr1F5z2S-4zKc1bH8kclL5vHDm15P_YS49zYkDDKt1o5w0ZokdByYmddneN-CIFRhbZ-1eH5AUfboSS7M0jE3u2alWtBhVV4jnDtpoyl7NOXlBpfr1ZXYI')"></div>
+<div class="absolute inset-0 bg-gradient-to-r from-primary/80 to-transparent flex items-center p-lg">
+<div class="max-w-xs">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-primary mb-1">Bayanihan Spirits</h2>
+<p class="font-body-sm text-body-sm text-on-primary-container opacity-90">Connecting students through shared experiences and local finds.</p>
+</div>
+</div>
+</div>
+</section><section class="px-margin-mobile pb-md">
+  <div class="bg-primary-container text-on-primary-container p-md rounded-xl shadow-md flex items-center justify-between group cursor-pointer active:scale-95 transition-transform">
+    <div class="flex items-center gap-md">
+      <div class="bg-surface-container-lowest p-3 rounded-full text-primary">
+        <span class="material-symbols-outlined text-[32px]">translate</span>
+      </div>
+      <div>
+        <h3 class="font-headline-md text-headline-md">English Learning</h3>
+        <p class="font-body-sm text-body-sm opacity-90">Master daily conversations &amp; grammar</p>
+      </div>
+    </div>
+    <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward_ios</span>
+  </div>
+</section>
+<!-- Horizontal Categories -->
+<nav class="sticky top-16 bg-background/95 backdrop-blur-md z-40 py-sm">
+<div class="flex gap-sm overflow-x-auto no-scrollbar px-margin-mobile">
+<button class="active-chip px-md py-xs rounded-full font-label-caps text-label-caps whitespace-nowrap transition-all shadow-sm">All</button>
+<button class="bg-surface-container hover:bg-surface-variant px-md py-xs rounded-full font-label-caps text-label-caps text-on-surface-variant whitespace-nowrap transition-all">Carinderia</button>
+<button class="bg-surface-container hover:bg-surface-variant px-md py-xs rounded-full font-label-caps text-label-caps text-on-surface-variant whitespace-nowrap transition-all">English</button>
+<button class="bg-surface-container hover:bg-surface-variant px-md py-xs rounded-full font-label-caps text-label-caps text-on-surface-variant whitespace-nowrap transition-all">Shower</button>
+<button class="bg-surface-container hover:bg-surface-variant px-md py-xs rounded-full font-label-caps text-label-caps text-on-surface-variant whitespace-nowrap transition-all">Travel</button>
+<button class="bg-surface-container hover:bg-surface-variant px-md py-xs rounded-full font-label-caps text-label-caps text-on-surface-variant whitespace-nowrap transition-all">Exchange</button>
+<button class="bg-surface-container hover:bg-surface-variant px-md py-xs rounded-full font-label-caps text-label-caps text-on-surface-variant whitespace-nowrap transition-all">Laundry</button>
+</div>
+</nav>
+<!-- Feed Grid -->
+<section class="px-margin-mobile py-lg grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg">
+<!-- Post Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all group duration-700 opacity-100 translate-y-0">
+<div class="h-48 relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Sisig plate." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOIfr6xmSTHttAuHIkJtX-klPeVp2ay38SkwSlZYWWXI-Xh19OpcQwf89TkL-YfdoaPvW5hNspyHht_7QricaF8qJUjuaLNdmd9OFFUfIOUoqhZbreFJYroB7S9H_-hZrs1iVe6Q5j41QKSf6FAaR4kOrlJ3pYpErrludjDOFaAL2jVQjJutOb9Jc6vkNgAtHATxFGQDqC06ty-DF4M-qMx3SspOG-YCoToyn8On1cd8jQ7dI6Yg5j__6pOIbY1U-sx0B7goh-9Sk">
+<div class="absolute top-sm left-sm">
+<span class="bg-primary text-on-primary font-label-caps text-label-caps px-sm py-1 rounded-lg shadow-sm">Carinderia</span>
+</div>
+<div class="absolute bottom-sm right-sm bg-surface-bright/90 backdrop-blur-sm px-sm py-1 rounded-lg shadow-sm border border-outline-variant">
+<span class="font-bold text-secondary">150 PHP</span>
+</div>
+</div>
+<div class="p-md">
+<div class="flex justify-between items-start mb-sm">
+<h3 class="font-headline-md text-headline-md text-on-surface">Best Sisig near school</h3>
+<div class="flex items-center text-secondary">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-caps text-label-caps ml-1">4.8</span>
+</div>
+</div>
+<div class="flex items-center justify-between mt-lg pt-md border-t border-outline-variant">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center">
+<span class="font-label-caps text-primary text-[10px]">ML</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface">Mateo L.</p>
+<p class="text-[10px] text-outline">2 hours ago</p>
+</div>
+</div>
+<button class="text-primary hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Post Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all group duration-700 opacity-100 translate-y-0">
+<div class="h-48 relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Blue Lagoon pool." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcHn8Oz7NmCj6iL0WeWlP46BdTUpI94e2Eaccm6hpMj0gkg0ETFkBSwiGmuuaOSZMJeezxe2wR3vFU_dADl2VQ6HCfthhaLg5TORFn-I72VeXEt1PjyIL_vTSt5YrOPrF5vNgNne3a7r6xZfDhbhk2FE3twf30Gt7WaZEuHbZHBYcb2-Dx9eCSbDM4tG0melH0sYGxEaKaxzb9lMWR7_JJUafVVx-VC_n4Yp_hoexRk8PhN25XtYijppFCrTtevhuMesgTZa-Hm_E">
+<div class="absolute top-sm left-sm">
+<span class="bg-tertiary text-on-tertiary font-label-caps text-label-caps px-sm py-1 rounded-lg shadow-sm">Travel</span>
+</div>
+<div class="absolute bottom-sm right-sm bg-surface-bright/90 backdrop-blur-sm px-sm py-1 rounded-lg shadow-sm border border-outline-variant">
+<span class="font-bold text-secondary">500 PHP</span>
+</div>
+</div>
+<div class="p-md">
+<div class="flex justify-between items-start mb-sm">
+<h3 class="font-headline-md text-headline-md text-on-surface">Day Pass at Blue Lagoon</h3>
+<div class="flex items-center text-secondary">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-caps text-label-caps ml-1">4.9</span>
+</div>
+</div>
+<div class="flex items-center justify-between mt-lg pt-md border-t border-outline-variant">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center">
+<span class="font-label-caps text-secondary text-[10px]">SC</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface">Sophia C.</p>
+<p class="text-[10px] text-outline">5 hours ago</p>
+</div>
+</div>
+<button class="text-primary hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Post Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all group duration-700 opacity-100 translate-y-0">
+<div class="h-48 relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Laundromat interior." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_crX0A7xbFY9XYI0LsjgcfvOC4pZ5kO6ZK1951bovD3JwPLUHOdiQLGz2Yhzo31roT9dj0HgXJqTUA6IWc7my3z-CnDfz944RSXtb3e_BmgAjzXQQU3sk9SvoHwM81JkXTd3LcP1v9nzp89mvia8ww6M_g-uKeZN1JqrZ7NDmZHShS6xAf_vhWniwOoOzm6iB2s-WY8aH-Eciz2ASevoH7dxUcJcLTUvx1JOdl-7KyQJ1UQtlbF7b5nkiz6LAB-UEy0T4_ChnOKo">
+<div class="absolute top-sm left-sm">
+<span class="bg-secondary text-on-secondary font-label-caps text-label-caps px-sm py-1 rounded-lg shadow-sm">Laundry</span>
+</div>
+<div class="absolute bottom-sm right-sm bg-surface-bright/90 backdrop-blur-sm px-sm py-1 rounded-lg shadow-sm border border-outline-variant">
+<span class="font-bold text-secondary">35 PHP/kg</span>
+</div>
+</div>
+<div class="p-md">
+<div class="flex justify-between items-start mb-sm">
+<h3 class="font-headline-md text-headline-md text-on-surface">Quick Dry Laundry Shop</h3>
+<div class="flex items-center text-secondary">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-caps text-label-caps ml-1">4.5</span>
+</div>
+</div>
+<div class="flex items-center justify-between mt-lg pt-md border-t border-outline-variant">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-tertiary-fixed flex items-center justify-center">
+<span class="font-label-caps text-tertiary text-[10px]">JR</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface">Juan R.</p>
+<p class="text-[10px] text-outline">1 day ago</p>
+</div>
+</div>
+<button class="text-primary hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl bg-surface-container-high dark:bg-surface-container-highest shadow-lg flex justify-around items-center h-20 px-4 pb-2">
+<!-- Home (Active) -->
+<a class="flex flex-col items-center justify-center bg-primary text-on-primary rounded-full px-6 py-2 active:scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-caps text-label-caps mt-1">Home</span>
+</a>
+<!-- Post (Action Button) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant rounded-full active:scale-90 transition-all duration-200" href="#">
+<div class="bg-secondary-container text-on-secondary-container p-3 rounded-full -mt-10 shadow-lg border-4 border-background">
+<span class="material-symbols-outlined text-[32px]" data-icon="add_circle">add_circle</span>
+</div>
+<span class="font-label-caps text-label-caps mt-1">Post</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant rounded-full active:scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-caps text-label-caps mt-1">Profile</span>
+</a>
+</nav>
+<!-- Micro-interactions Script -->
+<script>
+    document.querySelectorAll('nav button').forEach(button => {
+        button.addEventListener('click', function() {
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.classList.remove('active-chip');
+                btn.classList.add('bg-surface-container', 'text-on-surface-variant');
+                btn.classList.remove('shadow-sm');
+            });
+            this.classList.add('active-chip');
+            this.classList.remove('bg-surface-container', 'text-on-surface-variant');
+            this.classList.add('shadow-sm');
+        });
+    });
+
+    const observerOptions = {
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('opacity-100', 'translate-y-0');
+                entry.target.classList.remove('opacity-0', 'translate-y-4');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.group').forEach(card => {
+        card.classList.add('transition-all', 'duration-700', 'opacity-0', 'translate-y-4');
+        observer.observe(card);
+    });
+</script>
+
+
+</body></html>

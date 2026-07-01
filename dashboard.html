@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kredo Connect - Onboarding</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Geist:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 16px;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+    </style>
+<!-- Insert Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "error-container": "#ffdad6",
+                      "on-tertiary-fixed-variant": "#005236",
+                      "on-primary-fixed": "#00174b",
+                      "tertiary": "#006242",
+                      "primary-fixed": "#dbe1ff",
+                      "on-tertiary-container": "#bdffdb",
+                      "on-tertiary": "#ffffff",
+                      "surface-variant": "#d3e4fe",
+                      "surface-container": "#e5eeff",
+                      "inverse-primary": "#b4c5ff",
+                      "tertiary-container": "#007d55",
+                      "surface-bright": "#f8f9ff",
+                      "on-secondary-fixed": "#2a1700",
+                      "outline-variant": "#c3c6d7",
+                      "background": "#f8f9ff",
+                      "surface-container-lowest": "#ffffff",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "inverse-surface": "#213145",
+                      "secondary-fixed": "#ffddb8",
+                      "primary-container": "#2563eb",
+                      "secondary": "#855300",
+                      "on-surface": "#0b1c30",
+                      "on-primary-container": "#eeefff",
+                      "tertiary-fixed-dim": "#4edea3",
+                      "outline": "#737686",
+                      "surface-dim": "#cbdbf5",
+                      "inverse-on-surface": "#eaf1ff",
+                      "on-background": "#0b1c30",
+                      "surface-container-low": "#eff4ff",
+                      "surface-container-highest": "#d3e4fe",
+                      "surface-container-high": "#dce9ff",
+                      "secondary-fixed-dim": "#ffb95f",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "error": "#ba1a1a",
+                      "surface-tint": "#0053db",
+                      "on-tertiary-fixed": "#002113",
+                      "on-surface-variant": "#434655",
+                      "on-error": "#ffffff",
+                      "primary": "#004ac6",
+                      "tertiary-fixed": "#6ffbbe",
+                      "surface": "#f8f9ff",
+                      "on-secondary-fixed-variant": "#653e00",
+                      "on-secondary-container": "#684000",
+                      "on-error-container": "#93000a",
+                      "secondary-container": "#fea619",
+                      "on-primary": "#ffffff",
+                      "on-secondary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sm": "8px",
+                      "margin-mobile": "16px",
+                      "gutter": "16px",
+                      "md": "16px",
+                      "lg": "24px",
+                      "base": "4px",
+                      "xs": "4px",
+                      "max-width": "1280px",
+                      "xl": "48px",
+                      "margin-desktop": "32px"
+              },
+              "fontFamily": {
+                      "body-lg": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "code-snippet": ["Geist"],
+                      "body-sm": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "label-caps": ["Geist"],
+                      "headline-md": ["Inter"]
+              },
+              "fontSize": {
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "code-snippet": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-lg overflow-x-hidden min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="bg-surface sticky top-0 z-50 shadow-sm flex items-center justify-between px-margin-mobile h-16 w-full">
+<div class="flex items-center gap-4">
+<button class="text-primary active:scale-95 transition-transform">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Kredo Plus</h1>
+</div>
+<div class="flex items-center">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden active:scale-95 transition-transform border-2 border-primary-container">
+<img class="w-full h-full object-cover" data-alt="A professional close-up portrait of a friendly Southeast Asian male student smiling warmly. He is wearing a clean white polo shirt against a blurred modern educational environment background. The lighting is bright and natural, reflecting a supportive and welcoming community atmosphere consistent with high-contrast corporate modern design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCvKIeoqghicsxjbazuEOFKkUXcs29x4ugs8asu9BX5tJA4SIZmkkEBC6znLJhzXDWtiN-2C88XRn9YIJf3Pw29rakpiXWfQqhr9P5u-uBi4PsWc8rbtE8xhzCsIzfgA0vnWt7yWxvlRjIzctG6LRAJC8J37LV6FDe6NezJBc5h7Cvf3MEfnNAODM0llHagKDyVGHhZ34_xKQt5c3NijK1ZpXVoFdd1XGpsw7FcFfr6oR7VAH4L3jZx_lQruIqRi9_nlW8ZAoyVlA"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop py-lg">
+<!-- Welcome Hero Section -->
+<div class="relative mb-xl overflow-hidden rounded-xl p-lg bg-primary-container text-on-primary-container flex flex-col md:flex-row items-center justify-between gap-lg">
+<div class="relative z-10 space-y-md md:w-2/3">
+<span class="font-label-caps text-label-caps bg-on-primary-container/20 px-3 py-1 rounded-full text-on-primary-container">Welcome Back, Student!</span>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg">What would you like to do today?</h2>
+<p class="font-body-lg text-on-primary-container/80 max-w-lg">
+                    Select a path to continue your journey with Kredo Connect. We're here to support your studies and community life.
+                </p>
+</div>
+<div class="w-full md:w-1/3 aspect-video md:aspect-square relative flex items-center justify-center">
+<div class="absolute inset-0 bg-primary/20 rounded-full blur-3xl animate-pulse"></div>
+<div class="w-48 h-48 bg-white/10 rounded-2xl border border-white/20 backdrop-blur-sm flex items-center justify-center rotate-6 animate-float">
+<span class="material-symbols-outlined text-6xl" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
+</div>
+</div>
+</div>
+<!-- Action Cards: Bento-style Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-lg">
+<!-- Card 1: Browse Study Abroad (Featured) -->
+<button class="group relative col-span-1 md:col-span-8 flex flex-col items-start text-left overflow-hidden rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-lg transition-all duration-300 border border-outline-variant/30 active:scale-[0.98]" onclick="console.log('Browse Study Abroad')">
+<div class="w-full h-48 bg-surface-variant relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent z-10"></div>
+<div class="absolute top-4 right-4 z-20 bg-primary text-on-primary font-label-caps text-label-caps px-3 py-1 rounded-full">New Updates</div>
+<div class="w-full h-full transform group-hover:scale-105 transition-transform duration-700">
+<div class="w-full h-full bg-cover bg-center" data-alt="A vibrant digital illustration of a globe surrounded by diverse community members sharing information on floating digital screens. The style is modern corporate with high-contrast blue and white tones, featuring clean vector lines and an energetic student-focused vibe. Soft lighting and generous whitespace evoke a sense of professional clarity and curiosity." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBs5tKeMsanv4pE9FzPys-eKuUnLwO6DI9818fT2AjUjLn42gmywcA4_rXZDewK-70z3mtxJLi_Raucvvd2Hed5Ed_qYSDSAgudWg1YHRFxfIoqbDncgMOvsk2WVbYa9YcobaPQd5W4VSIQVLwvkCGWXfbbnrZ88OTp_9yeiyBYotUaU9gS43h6hELeNsM4OI0gwoIvxYIpRA1PNbehqI8XRZliBazNpJXR7rgq8n9tTyP2JVPnWnx6ku7oz76KmaIamt7pB3u5Jwk')"></div>
+</div>
+</div>
+<div class="p-lg space-y-sm">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">public</span>
+<h3 class="font-headline-md text-headline-md">Browse Study Abroad Info</h3>
+</div>
+<p class="font-body-sm text-on-surface-variant">Explore community posts, visa guides, and firsthand experiences from students across the globe.</p>
+<div class="flex items-center gap-2 text-primary font-label-caps text-label-caps mt-4">
+<span>EXPLORE NOW</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</div>
+</div>
+</button>
+<!-- Card 2: Practice English -->
+<button class="group relative col-span-1 md:col-span-4 flex flex-col items-start text-left overflow-hidden rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-lg transition-all duration-300 border border-outline-variant/30 active:scale-[0.98]" onclick="console.log('Practice English')">
+<div class="p-lg flex flex-col h-full w-full">
+<div class="w-14 h-14 rounded-xl bg-secondary-container text-on-secondary-container flex items-center justify-center mb-lg group-hover:rotate-6 transition-transform">
+<span class="material-symbols-outlined text-3xl">translate</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-sm">Practice English</h3>
+<p class="font-body-sm text-on-surface-variant mb-auto">Start your language learning journey with personalized AI sessions and peer challenges.</p>
+<div class="mt-lg w-full bg-surface-variant/50 rounded-lg p-md">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Your Level: B2</span>
+<span class="font-label-caps text-label-caps text-primary">85% to C1</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-gradient-to-r from-primary to-tertiary-fixed-dim h-full w-[85%]"></div>
+</div>
+</div>
+</div>
+</button>
+<!-- Card 3: Update Shower Status -->
+<button class="group relative col-span-1 md:col-span-12 flex flex-col md:flex-row items-center text-left overflow-hidden rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-lg transition-all duration-300 border border-outline-variant/30 active:scale-[0.98]" onclick="console.log('Update Shower Status')">
+<div class="w-full md:w-1/3 p-lg flex items-center justify-center bg-surface-container-high/50">
+<div class="relative">
+<div class="w-24 h-24 rounded-full bg-tertiary-container flex items-center justify-center text-on-tertiary-container relative z-10">
+<span class="material-symbols-outlined text-4xl">shower</span>
+</div>
+<div class="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-error flex items-center justify-center text-white text-[10px] font-bold border-2 border-white animate-bounce">2</div>
+</div>
+</div>
+<div class="w-full md:w-2/3 p-lg flex flex-col justify-center">
+<div class="flex items-center gap-3 mb-sm">
+<h3 class="font-headline-md text-headline-md">Update Shower Status</h3>
+<span class="font-label-caps text-label-caps bg-secondary-fixed text-on-secondary-fixed px-2 py-0.5 rounded">COMMUNITY</span>
+</div>
+<p class="font-body-sm text-on-surface-variant max-w-md">Coordinate shared facilities with housemates efficiently. See who's next or mark your slot as finished to keep the Bayanihan spirit alive.</p>
+<div class="mt-md flex gap-sm overflow-x-auto pb-2 scrollbar-hide">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-white bg-slate-300 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Small circular avatar of a student for housemate UI" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB13txLXHtnxqXyqHcTX3ZbLC7E_dchvDltOQhAYgkSWnPYz0sTg0Fg6Le4dFYB4E4zwUeJa7YRK2z-ZU4b9NpCdIS_vhmP5GWEQZCWiHwqfbYpHgyuQHtqEbRPq72jmJWF6Q4em4kzsyxLkrrkU5NC7MbsGYIvLl0gHC4QBHfQh1mvRoyIEDzvxyVVLjv5bY5I_XJ69t0Lb7z4-WGlCrOzSG7icw3gUBfhWT2ukKh8cWvSQc4qrXJTak3FbzXAhJ2jdGOBm8GKfbc"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-slate-400 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Small circular avatar of another student for housemate UI" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXZ_HDutAcMD2BQAGfhWX3bBNlmxiJN3vC0cGmisF6LzQD-ypHuRbnQ1cniKBoH-cHqec17BpPM54i8I7X4xBfDf7V7SuGtu1qETz0zdmXqS-rvD-2csKwG1dbniffvJJb6BC9_cc0BpJCjvlfDA3hEXXu_Tf9H6mEyTqrA7lTjdGb9KPf-GFWvLcaH_EN2uVWsV8LQrht6MSQrmokoePdacvrS_jIW4DKyRcopoqsmp-83ZVYNcRMEaJQSzeT4i8PKyrTGzostyI"/>
+</div>
+</div>
+<span class="font-body-sm text-on-surface-variant italic">2 housemates currently waiting</span>
+</div>
+</div>
+</button>
+</div>
+<!-- Secondary Suggestions -->
+<section class="mt-xl">
+<h4 class="font-label-caps text-label-caps text-on-surface-variant mb-md tracking-widest uppercase">Quick Insights</h4>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-md">
+<div class="p-md rounded-xl bg-surface-container-low border border-outline-variant/20 flex flex-col gap-xs">
+<span class="material-symbols-outlined text-primary text-xl">event</span>
+<span class="font-headline-md text-headline-md">Oct 24</span>
+<p class="font-body-sm text-on-surface-variant">Next Class</p>
+</div>
+<div class="p-md rounded-xl bg-surface-container-low border border-outline-variant/20 flex flex-col gap-xs">
+<span class="material-symbols-outlined text-secondary text-xl">payments</span>
+<span class="font-headline-md text-headline-md">Paid</span>
+<p class="font-body-sm text-on-surface-variant">Dorm Fees</p>
+</div>
+<div class="p-md rounded-xl bg-surface-container-low border border-outline-variant/20 flex flex-col gap-xs">
+<span class="material-symbols-outlined text-tertiary text-xl">group</span>
+<span class="font-headline-md text-headline-md">12</span>
+<p class="font-body-sm text-on-surface-variant">Active Peers</p>
+</div>
+<div class="p-md rounded-xl bg-surface-container-low border border-outline-variant/20 flex flex-col gap-xs">
+<span class="material-symbols-outlined text-error text-xl">notifications_active</span>
+<span class="font-headline-md text-headline-md">3</span>
+<p class="font-body-sm text-on-surface-variant">Alerts</p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl bg-surface-container shadow-lg flex justify-around items-center h-20 px-4 pb-2">
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-all duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-caps text-label-caps">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant px-4 py-1 rounded-xl active:scale-90 transition-all duration-200">
+<span class="material-symbols-outlined">add_circle</span>
+<span class="font-label-caps text-label-caps">Post</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant px-4 py-1 rounded-xl active:scale-90 transition-all duration-200">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-caps text-label-caps">Profile</span>
+</button>
+</nav>
+<!-- Micro-interaction Script -->
+<script>
+        // Simple scale effect for interaction feedback
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mousedown', () => {
+                btn.style.transform = 'scale(0.96)';
+            });
+            btn.addEventListener('mouseup', () => {
+                btn.style.transform = 'scale(1)';
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'scale(1)';
+            });
+        });
+
+        // Sticky header transparency on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 20) {
+                header.classList.add('shadow-md');
+                header.style.backgroundColor = 'rgba(248, 249, 255, 0.95)';
+                header.style.backdropFilter = 'blur(8px)';
+            } else {
+                header.classList.remove('shadow-md');
+                header.style.backgroundColor = '#f8f9ff';
+                header.style.backdropFilter = 'none';
+            }
+        });
+    </script>
+</body></html>
