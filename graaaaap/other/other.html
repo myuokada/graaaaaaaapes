@@ -58,7 +58,8 @@
   .font-mono { font-family: 'IBM Plex Mono', monospace; }
 
   /* signature: 手書き風の下線が STORE カテゴリの選択状態にじわっと伸びる */
-  .cat-link { position: relative; }
+  /* --cat-color をカテゴリごとに変えることで、下線・選択時の文字色・バッジ色を全部統一する */
+  .cat-link { position: relative; --cat-color: #4736F0; }
   .cat-link::before {
     content: '';
     position: absolute;
@@ -66,7 +67,7 @@
     top: 50%;
     width: 3px;
     height: 0%;
-    background: rgb(248, 186, 2);
+    background: var(--cat-color);
     border-radius: 2px;
     transform: translateY(-50%);
     transition: height .25s ease;
@@ -74,6 +75,8 @@
 
   .cat-link.active::before,
   .cat-link:hover::before { height: 70%; }
+
+  .cat-link.active { color: var(--cat-color); font-weight: 600; }
 
   .food-card { transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease; }
   .food-card:hover { transform: translateY(-4px); }
@@ -126,7 +129,7 @@
   <div class="max-w-7xl w-full mx-auto px-4 sm:px-6 pt-6">
     <!-- Hero -->
     <div class="relative h-52 sm:h-64 rounded-3xl overflow-hidden shadow-card">
-      <img src="https://images.unsplash.com/photo-1544148103-0773bf10d330?q=80&w=1600&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover">
+      <img src="https://images.unsplash.com/photo-1604335399105-a0c585fd81a1?q=80&w=800&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover">
       <div class="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/25 to-transparent"></div>
       <div class="relative h-full flex flex-col justify-end p-6 sm:p-8">
         <h1 class="font-display text-4xl sm:text-5xl font-bold text-white">Other</h1>
@@ -146,12 +149,12 @@
         </label>
 
         <p class="font-mono text-[11px] tracking-[0.18em] text-ink/40 mb-3 pl-1">STORE</p>
-        <nav class="flex flex-col gap-1 pl-5">
-          <a href="#" class="cat-link active flex items-center justify-between py-2 text-sm font-semibold text-brand-600">Landry</a>
-          <a href="#" class="cat-link flex items-center justify-between py-2 text-sm text-ink/70 hover:text-ink">Money Exchange</a>
-          <a href="#" class="cat-link flex items-center justify-between py-2 text-sm text-ink/70 hover:text-ink">SIM</a>
-          <a href="#" class="cat-link flex items-center justify-between py-2 text-sm text-ink/70 hover:text-ink">Hospital</a>
-          <a href="#" class="cat-link flex items-center justify-between py-2 text-sm text-ink/70 hover:text-ink">Others</a>
+        <nav class="flex flex-col gap-1 pl-5" id="storeNav">
+          <a href="#" data-tag="Laundry" style="--cat-color:#F8BA02" class="cat-link active flex items-center justify-between py-2 text-sm text-ink/70 hover:text-ink">Laundry</a>
+          <a href="#" data-tag="Money Exchange" style="--cat-color:#1E9E63" class="cat-link flex items-center justify-between py-2 text-sm text-ink/70 hover:text-ink">Money Exchange</a>
+          <a href="#" data-tag="SIM Card" style="--cat-color:#2F6FED" class="cat-link flex items-center justify-between py-2 text-sm text-ink/70 hover:text-ink">SIM</a>
+          <a href="#" data-tag="Hospital" style="--cat-color:#DC4C4C" class="cat-link flex items-center justify-between py-2 text-sm text-ink/70 hover:text-ink">Hospital</a>
+          <a href="#" data-tag="Others" style="--cat-color:#7C6BA6" class="cat-link flex items-center justify-between py-2 text-sm text-ink/70 hover:text-ink">Others</a>
         </nav>
       </div>
     </aside>
@@ -173,7 +176,7 @@
   <div class="modal-panel bg-paper rounded-2xl w-full max-w-2xl overflow-hidden shadow-pop opacity-0 translate-y-3">
     <div class="relative h-64">
       <img id="modalImg" src="" class="w-full h-full object-cover" alt="">
-      <span id="modalTag" class="absolute top-3 left-3 bg-brand-600 text-white text-[11px] font-semibold px-2.5 py-1 rounded-full"></span>
+      <span id="modalTag" class="absolute top-3 left-3 text-white text-[11px] font-semibold px-2.5 py-1 rounded-full"></span>
       <span id="modalPrice" class="absolute bottom-3 right-3 bg-paper/95 font-mono font-semibold text-sm px-2.5 py-1 rounded-lg"></span>
       <button onclick="closeModal()" class="absolute top-3 right-3 bg-ink/50 hover:bg-ink/70 text-white w-7 h-7 rounded-full flex items-center justify-center" aria-label="閉じる">✕</button>
     </div>
@@ -192,6 +195,16 @@
 </div>
 
 <script>
+  // ---- カテゴリごとの色（サイドバー・バッジ・下線すべてここから参照） ----
+  const categoryColors = {
+    'Laundry': '#F8BA02',
+    'Money Exchange': '#1E9E63',
+    'SIM Card': '#2F6FED',
+    'Hospital': '#DC4C4C',
+    'Others': '#7C6BA6',
+  };
+  function colorOf(tag){ return categoryColors[tag] || '#4736F0'; }
+
   // ---- テストデータ（自由に増減・編集OK） ----
 const items = [
   // ---- Laundry ----
@@ -230,7 +243,7 @@ const items = [
       card.innerHTML = `
         <div class="relative h-40">
           <img src="${it.img}" class="w-full h-full object-cover" alt="${it.title}" loading="lazy">
-          <span class="absolute top-2.5 left-2.5 bg-brand-600 text-white text-[11px] font-semibold px-2.5 py-1 rounded-full">${it.tag}</span>
+          <span class="absolute top-2.5 left-2.5 text-white text-[11px] font-semibold px-2.5 py-1 rounded-full" style="background:${colorOf(it.tag)}">${it.tag}</span>
          
         </div>
         <div class="p-4">
@@ -280,6 +293,7 @@ const items = [
   function openModal(it){
     document.getElementById('modalImg').src = it.img;
     document.getElementById('modalTag').textContent = it.tag;
+    document.getElementById('modalTag').style.background = colorOf(it.tag);
     document.getElementById('modalPrice').textContent = money(it.price);
     document.getElementById('modalTitle').textContent = it.title;
     document.getElementById('modalDesc').textContent = it.desc;
@@ -305,6 +319,15 @@ const items = [
 
   document.getElementById('detailModal').addEventListener('click', (e) => {
     if(e.target.id === 'detailModal') closeModal();
+  });
+
+  // STOREサイドバーのカテゴリ選択（クリックで active 切り替え）
+  document.querySelectorAll('#storeNav .cat-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelectorAll('#storeNav .cat-link').forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+    });
   });
 
   renderGrid(currentPage);
