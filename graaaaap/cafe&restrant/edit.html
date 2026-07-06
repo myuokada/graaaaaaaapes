@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Money Exchange 投稿 — Kredo Plus</title>
+<title>Restaurant & Cafe 編集 — Kredo Plus</title>
 
 <!-- Tailwind CDN: ビルド不要、そのままブラウザ / Live Server で確認できます -->
 <script src="https://cdn.tailwindcss.com"></script>
@@ -117,10 +117,10 @@
   <header class="sticky top-0 z-30 bg-paper/90 backdrop-blur border-b border-ink/10">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <a href="other.html" class="p-2 -ml-2 rounded-lg hover:bg-ink/5 transition-colors" aria-label="戻る">
+        <a href="restaurant-cafe.html" class="p-2 -ml-2 rounded-lg hover:bg-ink/5 transition-colors" aria-label="戻る">
           <i class="fa-solid fa-arrow-left text-[18px]"></i>
         </a>
-        <span class="font-display font-bold text-xl tracking-tight text-brand-600">Money Exchange</span>
+        <span class="font-display font-bold text-xl tracking-tight text-brand-600">Restaurant & Cafe 編集</span>
       </div>
       <button class="p-2 rounded-full hover:bg-ink/5" aria-label="削除">
         <i class="fa-regular fa-trash-can text-clay-500 text-[18px]"></i>
@@ -133,13 +133,13 @@
 
       <!-- Image -->
       <div>
-        <label class="block text-xs font-mono tracking-[0.1em] text-ink/40 mb-2"Image</label>
+        <label class="block text-xs font-mono tracking-[0.1em] text-ink/40 mb-2">写真</label>
         <label for="imageInput" class="image-drop relative block h-48 sm:h-56 rounded-2xl border-2 border-dashed border-ink/15 overflow-hidden cursor-pointer group">
-          <img id="imagePreview" src="https://images.unsplash.com/photo-1580519542036-c47de6196ba5?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover" alt="写真プレビュー">
+          <img id="imagePreview" src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover" alt="写真プレビュー">
           <div class="absolute inset-0 bg-ink/0 group-hover:bg-ink/40 transition-colors flex items-center justify-center">
             <span class="opacity-0 group-hover:opacity-100 transition-opacity bg-paper/95 px-4 py-2 rounded-full flex items-center gap-2 shadow-pop">
               <i class="fa-solid fa-camera text-brand-600"></i>
-              <span class="text-sm font-semibold">Edit post</span>
+              <span class="text-sm font-semibold">写真を変更</span>
             </span>
           </div>
         </label>
@@ -150,25 +150,22 @@
       <div>
         <label class="block text-xs font-mono tracking-[0.1em] text-ink/40 mb-2">CATEGORY</label>
         <div id="categoryChips" class="flex flex-wrap gap-2">
-          <button type="button" data-value="Laundry" style="--chip-color:#F8BA02" class="cat-chip px-4 py-2 rounded-full text-sm font-semibold transition-all">Laundry</button>
-          <button type="button" data-value="Money Exchange" style="--chip-color:#1E9E63" class="cat-chip active px-4 py-2 rounded-full text-sm font-semibold transition-all">Money Exchange</button>
-          <button type="button" data-value="SIM Card" style="--chip-color:#2F6FED" class="cat-chip px-4 py-2 rounded-full text-sm font-semibold transition-all">SIM Card</button>
-          <button type="button" data-value="Hospital" style="--chip-color:#DC4C4C" class="cat-chip px-4 py-2 rounded-full text-sm font-semibold transition-all">Hospital</button>
-          <button type="button" data-value="Others" style="--chip-color:#7C6BA6" class="cat-chip px-4 py-2 rounded-full text-sm font-semibold transition-all">Others</button>
+          <button type="button" data-value="Restaurant" style="--chip-color:#E4572E" class="cat-chip active px-4 py-2 rounded-full text-sm font-semibold transition-all">Restaurant</button>
+          <button type="button" data-value="Cafe" style="--chip-color:#8B5E3C" class="cat-chip px-4 py-2 rounded-full text-sm font-semibold transition-all">Cafe</button>
         </div>
-        <input type="hidden" id="category" value="Money Exchange">
+        <input type="hidden" id="category" value="Restaurant">
       </div>
 
       <!-- Title -->
       <div>
         <label class="block text-xs font-mono tracking-[0.1em] text-ink/40 mb-2">TITLE</label>
-        <input type="text" id="title" class="field-input" placeholder="例: Best Rate USD to PHP">
+        <input type="text" id="title" class="field-input" value="Sunset Grill House" placeholder="例: Sunset Grill House">
       </div>
 
       <!-- Description -->
       <div>
         <label class="block text-xs font-mono tracking-[0.1em] text-ink/40 mb-2">DESCRIPTION</label>
-        <textarea id="description" rows="4" class="field-input resize-none" placeholder="Describe your store or service."></textarea>
+        <textarea id="description" rows="4" class="field-input resize-none" placeholder="お店・サービスの特徴を書いてみましょう">Steaks, seafood, and a sunset view perfect for celebrations.</textarea>
       </div>
 
       <!-- Actions -->
@@ -239,7 +236,7 @@
   document.querySelector('header button[aria-label="削除"]').addEventListener('click', () => {
     if (confirm('この投稿を削除しますか？この操作は取り消せません。')) {
       showToast('投稿を削除しました', 'fa-trash-can', 'text-clay-500');
-      setTimeout(() => { window.location.href = 'other.html'; }, 1200);
+      setTimeout(() => { window.location.href = 'restaurant-cafe.html'; }, 1200);
     }
   });
 </script>

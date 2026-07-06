@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kredo Plus — Marketplace</title>
+<title>Restaurant & Cafe — Kredo Plus</title>
 
 <!-- Tailwind CDN: ビルド不要、そのままブラウザ / Live Server で確認できます -->
 <script src="https://cdn.tailwindcss.com"></script>
@@ -46,7 +46,11 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- fontawesome cdn -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 
 <style>
   body { font-family: 'Inter', sans-serif; background: #FBF6EE; }
@@ -54,7 +58,8 @@
   .font-mono { font-family: 'IBM Plex Mono', monospace; }
 
   /* signature: 手書き風の下線が STORE カテゴリの選択状態にじわっと伸びる */
-  .cat-link { position: relative; }
+  /* --cat-color をカテゴリごとに変えることで、下線・選択時の文字色・バッジ色を全部統一する */
+  .cat-link { position: relative; --cat-color: #4736F0; }
   .cat-link::before {
     content: '';
     position: absolute;
@@ -62,22 +67,29 @@
     top: 50%;
     width: 3px;
     height: 0%;
-    background: #5A4CFF;
+    background: var(--cat-color);
     border-radius: 2px;
     transform: translateY(-50%);
     transition: height .25s ease;
   }
+
   .cat-link.active::before,
   .cat-link:hover::before { height: 70%; }
+
+  .cat-link.active { color: var(--cat-color); font-weight: 600; }
 
   .food-card { transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease; }
   .food-card:hover { transform: translateY(-4px); }
 
-  .heart-btn i { transition: transform .2s ease; }
-  .heart-btn.liked i { transform: scale(1.15); }
+  .heart-btn svg { transition: transform .2s ease, fill .2s ease, stroke .2s ease; }
+  .heart-btn.liked svg { fill: #CE7043; stroke: #CE7043; transform: scale(1.15); }
 
   ::-webkit-scrollbar { width: 10px; height: 10px; }
   ::-webkit-scrollbar-thumb { background: #E3E0FF; border-radius: 8px; }
+
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
 
   @keyframes riseIn {
     from { opacity: 0; transform: translateY(14px) scale(.98); }
@@ -112,8 +124,8 @@
           <select id="currentUserSelect" class="bg-transparent font-semibold text-ink outline-none cursor-pointer">
             <option value="Guest">Guest(誰でもない人)</option>
             <option value="Mateo L.">Mateo L.</option>
-            <option value="Sophia C.">Sophia C.</option>
-            <option value="Juan R.">Juan R.</option>
+            <option value="Kim C.">Kim C.</option>
+            <option value="Ella R.">Ella R.</option>
           </select>
         </label>
         <button class="relative p-2 rounded-full hover:bg-ink/5" aria-label="通知">
@@ -128,32 +140,29 @@
   <div class="max-w-7xl w-full mx-auto px-4 sm:px-6 pt-6">
     <!-- Hero -->
     <div class="relative h-52 sm:h-64 rounded-3xl overflow-hidden shadow-card">
-      <img src="https://images.unsplash.com/photo-1544148103-0773bf10d330?q=80&w=1600&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover" alt="カリンデリアの食卓">
+      <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1600&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover" alt="レストランのテーブル">
       <div class="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/25 to-transparent"></div>
       <div class="relative h-full flex flex-col justify-end p-6 sm:p-8">
-        <h1 class="font-display text-4xl sm:text-5xl font-bold text-white">Carinderia</h1>
-        <p class="text-white/85 mt-1 text-sm sm:text-base">Simple, delicious, and close to home. Bringing you the flavors of your neighborhood carinderia.</p>
+        <h1 class="font-display text-4xl sm:text-5xl font-bold text-white">Restaurant & Cafe</h1>
+        <p class="text-white/85 mt-1 text-sm sm:text-base">Sit-down dinners and cozy coffee corners, all in one place.</p>
       </div>
     </div>
   </div>
 
-  <div class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 flex gap-6">
+  <div class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 flex gap-6">
 
     <!-- Sidebar -->
     <aside id="sidebar" class="hidden md:block w-60 shrink-0">
       <div class="sticky top-24">
         <label class="relative block mb-6">
           <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-ink/40" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" placeholder="search" class="w-full bg-paper border border-ink/10 rounded-xl pl-9 pr-3 py-2.5 text-sm placeholder:text-ink/40 focus:outline-none focus:ring-2 focus:ring-brand-300">
+          <input type="text" placeholder="ストアを検索" class="w-full bg-paper border border-ink/10 rounded-xl pl-9 pr-3 py-2.5 text-sm placeholder:text-ink/40 focus:outline-none focus:ring-2 focus:ring-brand-300">
         </label>
 
         <p class="font-mono text-[11px] tracking-[0.18em] text-ink/40 mb-3 pl-1">STORE</p>
-        <nav class="flex flex-col gap-1 pl-5">
-          <a href="#" class="cat-link active flex items-center justify-between py-2 text-sm font-semibold text-brand-600">Orange</a>
-          <a href="#" class="cat-link flex items-center justify-between py-2 text-sm text-ink/70 hover:text-ink">Orange2</a>
-          <a href="#" class="cat-link flex items-center justify-between py-2 text-sm text-ink/70 hover:text-ink">Green</a>
-          <a href="#" class="cat-link flex items-center justify-between py-2 text-sm text-ink/70 hover:text-ink">Blue</a>
-          <a href="#" class="cat-link flex items-center justify-between py-2 text-sm text-ink/70 hover:text-ink">Others</a>
+        <nav class="flex flex-col gap-1 pl-5" id="storeNav">
+          <a href="#" data-tag="Restaurant" style="--cat-color:#E4572E" class="cat-link active flex items-center justify-between py-2 text-sm text-ink/70 hover:text-ink">Restaurant</a>
+          <a href="#" data-tag="Cafe" style="--cat-color:#8B5E3C" class="cat-link flex items-center justify-between py-2 text-sm text-ink/70 hover:text-ink">Cafe</a>
         </nav>
       </div>
     </aside>
@@ -187,7 +196,7 @@
   <div class="modal-panel bg-paper rounded-2xl w-full max-w-2xl overflow-hidden shadow-pop opacity-0 translate-y-3">
     <div class="relative h-64">
       <img id="modalImg" src="" class="w-full h-full object-cover" alt="">
-      <span id="modalTag" class="absolute top-3 left-3 bg-brand-600 text-white text-[11px] font-semibold px-2.5 py-1 rounded-full"></span>
+      <span id="modalTag" class="absolute top-3 left-3 text-white text-[11px] font-semibold px-2.5 py-1 rounded-full"></span>
       <span id="modalPrice" class="absolute bottom-3 right-3 bg-paper/95 font-mono font-semibold text-sm px-2.5 py-1 rounded-lg"></span>
       <button onclick="closeModal()" class="absolute top-3 right-3 bg-ink/50 hover:bg-ink/70 text-white w-7 h-7 rounded-full flex items-center justify-center" aria-label="閉じる">✕</button>
     </div>
@@ -218,49 +227,43 @@
 </div>
 
 <script>
+  // ---- カテゴリごとの色（サイドバー・バッジ・下線すべてここから参照） ----
+  const categoryColors = {
+    'Restaurant': '#E4572E',
+    'Cafe': '#8B5E3C',
+  };
+  function colorOf(tag){ return categoryColors[tag] || '#4736F0'; }
+
   // ---- テストデータ（自由に増減・編集OK） ----
-  const items = [
-    { tag: 'Carinderia', title: 'Best Sisig near school', desc: 'Crispy and flavorful sisig perfect with rice. A favorite among students!', price: 150, name: 'Mateo L.', time: '2時間前', likes: 34, img: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=12' },
-    { tag: 'Carinderia', title: 'Lutong Bahay Meals', desc: 'Home-cooked meals like how your mom makes it.', price: 120, name: 'Sophia C.', time: '5時間前', likes: 51, img: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=32' },
-    { tag: 'Carinderia', title: 'Fried Chicken Sarap', desc: 'Juicy fried chicken with special spices.', price: 90, name: 'Juan R.', time: '1日前', likes: 12, img: 'https://images.unsplash.com/photo-1562967914-608f82629710?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=51' },
-    { tag: 'Carinderia', title: 'Pinakbet and More', desc: 'Healthy veggies with a local twist.', price: 110, name: 'Angela M.', time: '1日前', likes: 8, img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=25' },
-    { tag: 'Carinderia', title: 'Grilled Bangus', desc: 'Fresh bangus grilled to perfection.', price: 130, name: 'Daniel L.', time: '2日前', likes: 22, img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=15' },
-    { tag: 'Carinderia', title: 'Bulalo sa Umaga', desc: 'Warm bulalo that heals your soul.', price: 140, name: 'Kim C.', time: '2日前', likes: 45, img: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=44' },
-    { tag: 'Carinderia', title: 'Beef Mami Special', desc: 'Rich broth noodles perfect for rainy days.', price: 80, name: 'Ella R.', time: '3日前', likes: 6, img: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=5' },
-    { tag: 'Carinderia', title: 'Lechon Roll Slices', desc: 'Crispy skin, tender meat, served hot.', price: 160, name: 'Marco T.', time: '4日前', likes: 29, img: 'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=8' },
-    { tag: 'Carinderia', title: 'Longsilog Combo', desc: 'Sweet longganisa with egg and rice.', price: 100, name: 'Rina P.', time: '5日前', likes: 3, img: 'https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=20' },
-    { tag: 'Carinderia', title: 'Best Sisig near school', desc: 'Crispy and flavorful sisig perfect with rice. A favorite among students!', price: 150, name: 'Mateo L.', time: '2時間前', likes: 34, img: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=12' },
-    { tag: 'Carinderia', title: 'Lutong Bahay Meals', desc: 'Home-cooked meals like how your mom makes it.', price: 120, name: 'Sophia C.', time: '5時間前', likes: 51, img: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=32' },
-    { tag: 'Carinderia', title: 'Fried Chicken Sarap', desc: 'Juicy fried chicken with special spices.', price: 90, name: 'Juan R.', time: '1日前', likes: 12, img: 'https://images.unsplash.com/photo-1562967914-608f82629710?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=51' },
-    { tag: 'Carinderia', title: 'Pinakbet and More', desc: 'Healthy veggies with a local twist.', price: 110, name: 'Angela M.', time: '1日前', likes: 8, img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=25' },
-    { tag: 'Carinderia', title: 'Grilled Bangus', desc: 'Fresh bangus grilled to perfection.', price: 130, name: 'Daniel L.', time: '2日前', likes: 22, img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=15' },
-    { tag: 'Carinderia', title: 'Bulalo sa Umaga', desc: 'Warm bulalo that heals your soul.', price: 140, name: 'Kim C.', time: '2日前', likes: 45, img: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=44' },
-    { tag: 'Carinderia', title: 'Beef Mami Special', desc: 'Rich broth noodles perfect for rainy days.', price: 80, name: 'Ella R.', time: '3日前', likes: 6, img: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=5' },
-    { tag: 'Carinderia', title: 'Lechon Roll Slices', desc: 'Crispy skin, tender meat, served hot.', price: 160, name: 'Marco T.', time: '4日前', likes: 29, img: 'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=8' },
-    { tag: 'Carinderia', title: 'Longsilog Combo', desc: 'Sweet longganisa with egg and rice.', price: 100, name: 'Rina P.', time: '5日前', likes: 3, img: 'https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=20' },
-    { tag: 'Carinderia', title: 'Best Sisig near school', desc: 'Crispy and flavorful sisig perfect with rice. A favorite among students!', price: 150, name: 'Mateo L.', time: '2時間前', likes: 34, img: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=12' },
-    { tag: 'Carinderia', title: 'Lutong Bahay Meals', desc: 'Home-cooked meals like how your mom makes it.', price: 120, name: 'Sophia C.', time: '5時間前', likes: 51, img: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=32' },
-    { tag: 'Carinderia', title: 'Fried Chicken Sarap', desc: 'Juicy fried chicken with special spices.', price: 90, name: 'Juan R.', time: '1日前', likes: 12, img: 'https://images.unsplash.com/photo-1562967914-608f82629710?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=51' },
-    { tag: 'Carinderia', title: 'Pinakbet and More', desc: 'Healthy veggies with a local twist.', price: 110, name: 'Angela M.', time: '1日前', likes: 8, img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=25' },
-    { tag: 'Carinderia', title: 'Grilled Bangus', desc: 'Fresh bangus grilled to perfection.', price: 130, name: 'Daniel L.', time: '2日前', likes: 22, img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=15' },
-    { tag: 'Carinderia', title: 'Bulalo sa Umaga', desc: 'Warm bulalo that heals your soul.', price: 140, name: 'Kim C.', time: '2日前', likes: 45, img: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=44' },
-    { tag: 'Carinderia', title: 'Beef Mami Special', desc: 'Rich broth noodles perfect for rainy days.', price: 80, name: 'Ella R.', time: '3日前', likes: 6, img: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=5' },
-    { tag: 'Carinderia', title: 'Lechon Roll Slices', desc: 'Crispy skin, tender meat, served hot.', price: 160, name: 'Marco T.', time: '4日前', likes: 29, img: 'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=8' },
-    { tag: 'Carinderia', title: 'Longsilog Combo', desc: 'Sweet longganisa with egg and rice.', price: 100, name: 'Rina P.', time: '5日前', likes: 3, img: 'https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=20' },
-  ];
+const items = [
+  // ---- Restaurant ----
+  { tag: 'Restaurant', title: 'Sunset Grill House', desc: 'Steaks, seafood, and a sunset view perfect for celebrations.', price: 450, name: 'Mateo L.', time: '2時間前', likes: 41, img: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=12' },
+  { tag: 'Restaurant', title: 'Ramen Ichiban', desc: 'Rich tonkotsu broth and handmade noodles, Japanese comfort food.', price: 280, name: 'Sophia C.', time: '4時間前', likes: 63, img: 'https://images.unsplash.com/photo-1591814468924-caf88d1232e1?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=32' },
+  { tag: 'Restaurant', title: 'Pizzeria Napoli', desc: 'Wood-fired Neapolitan pizza with imported Italian ingredients.', price: 350, name: 'Juan R.', time: '6時間前', likes: 37, img: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=51' },
+  { tag: 'Restaurant', title: 'Korean BBQ House', desc: 'All-you-can-eat grilled meats with banchan side dishes.', price: 599, name: 'Angela M.', time: '1日前', likes: 55, img: 'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=25' },
+  { tag: 'Restaurant', title: 'Bistro Cebu', desc: 'Modern Filipino fusion in a cozy, candle-lit setting.', price: 480, name: 'Daniel L.', time: '1日前', likes: 19, img: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=15' },
+
+  // ---- Cafe ----
+  { tag: 'Cafe', title: 'Brew & Books Corner', desc: 'Quiet study nooks with unlimited refills and fast wifi.', price: 150, name: 'Kim C.', time: '1時間前', likes: 58, img: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=44' },
+  { tag: 'Cafe', title: 'Matcha House Cebu', desc: 'Specialty matcha lattes and Japanese-style desserts.', price: 180, name: 'Ella R.', time: '3時間前', likes: 44, img: 'https://images.unsplash.com/photo-1515823064-d6e0c04616a7?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=5' },
+  { tag: 'Cafe', title: 'Third Wave Coffee Lab', desc: 'Single-origin pour-overs from local roasters, coffee nerd approved.', price: 160, name: 'Marco T.', time: '5時間前', likes: 39, img: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=8' },
+  { tag: 'Cafe', title: 'Rooftop View Cafe', desc: 'City skyline views with your afternoon iced coffee.', price: 190, name: 'Rina P.', time: '1日前', likes: 61, img: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=20' },
+  { tag: 'Cafe', title: 'Cat Cafe Purrfect', desc: 'Sip your latte while cuddling resident cafe cats.', price: 200, name: 'Josh T.', time: '2日前', likes: 72, img: 'https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=33' },
+];
 
   const PAGE_SIZE = 21;
   let currentPage = 1;
   let sortMode = 'new'; // 'new' | 'likes'
+  let activeCategory = 'Restaurant'; // 'Restaurant' | 'Cafe'
 
   function money(v){ return v + ' PHP'; }
 
   function getSortedItems(){
+    const filtered = items.filter(it => it.tag === activeCategory);
     if (sortMode === 'likes') {
-      // いいねの多い順(元の配列は壊さないようコピーしてから並び替え)
-      return [...items].sort((a, b) => b.likes - a.likes);
+      return [...filtered].sort((a, b) => b.likes - a.likes);
     }
-    return items; // 新着順 = 配列に入っている順番のまま
+    return filtered;
   }
 
   function renderGrid(page){
@@ -279,8 +282,8 @@
       card.innerHTML = `
         <div class="relative h-40">
           <img src="${it.img}" class="w-full h-full object-cover" alt="${it.title}" loading="lazy">
-          <span class="absolute top-2.5 left-2.5 bg-brand-600 text-white text-[11px] font-semibold px-2.5 py-1 rounded-full">${it.tag}</span>
-          <span class="absolute bottom-2.5 right-2.5 bg-paper/95 font-mono font-semibold text-xs px-2.5 py-1 rounded-lg">${money(it.price)}</span>
+          <span class="absolute top-2.5 left-2.5 text-white text-[11px] font-semibold px-2.5 py-1 rounded-full" style="background:${colorOf(it.tag)}">${it.tag}</span>
+         
         </div>
         <div class="p-4">
           <h3 class="font-display font-semibold text-base mb-1 truncate">${it.title}</h3>
@@ -294,8 +297,8 @@
               </div>
             </div>
             <button class="heart-btn shrink-0 p-1.5 rounded-full hover:bg-clay-400/10 flex items-center gap-1" aria-label="お気に入り" onclick="event.stopPropagation(); this.classList.toggle('liked'); this.querySelector('i').classList.toggle('fa-regular'); this.querySelector('i').classList.toggle('fa-solid');">
-              <i class="fa-regular fa-heart text-[18px] text-[#CE7043]"></i>
-              <span class="text-xs text-ink/40 font-mono">${it.likes}</span>
+            <i class="fa-regular fa-heart text-[18px] text-[#CE7043]"></i>
+            <span class="text-xs text-ink/40 font-mono">${it.likes}</span>
             </button>
           </div>
         </div>
@@ -337,6 +340,7 @@
   function openModal(it){
     document.getElementById('modalImg').src = it.img;
     document.getElementById('modalTag').textContent = it.tag;
+    document.getElementById('modalTag').style.background = colorOf(it.tag);
     document.getElementById('modalPrice').textContent = money(it.price);
     document.getElementById('modalTitle').textContent = it.title;
     document.getElementById('modalDesc').textContent = it.desc;
@@ -351,7 +355,7 @@
     ownerActions.classList.toggle('flex', isOwner);
 
     document.getElementById('modalEditBtn').onclick = () => {
-      alert(`「${it.title}」の編集画面へ移動します(edit-post.htmlに接続予定)`);
+      alert(`「${it.title}」の編集画面へ移動します(restaurant-cafe-edit.htmlに接続予定)`);
     };
     document.getElementById('modalDeleteBtn').onclick = () => {
       if (confirm(`「${it.title}」を削除しますか？この操作は取り消せません。`)) {
@@ -380,6 +384,19 @@
     if(e.target.id === 'detailModal') closeModal();
   });
 
+  // STOREサイドバーのカテゴリ選択（クリックで絞り込み+再描画）
+  document.querySelectorAll('#storeNav .cat-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelectorAll('#storeNav .cat-link').forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+      activeCategory = link.dataset.tag;
+      currentPage = 1;
+      renderGrid(currentPage);
+      renderPagination();
+    });
+  });
+
   document.getElementById('sortSelect').addEventListener('change', (e) => {
     sortMode = e.target.value;
     currentPage = 1;
@@ -393,7 +410,11 @@
   // モバイルではサイドバーを初期表示
   if(window.innerWidth >= 768){ document.getElementById('sidebar').classList.remove('hidden'); }
 </script>
-
+<!-- Back to top -->
+<button id="backToTop" onclick="window.scrollTo({top:0, behavior:'smooth'})" aria-label="上に戻る"
+  class="fixed right-5 bottom-24 z-40 w-11 h-11 rounded-full bg-brand-600 text-white shadow-pop flex items-center justify-center opacity-0 pointer-events-none translate-y-2 transition-all duration-300 hover:bg-brand-700">
+  <i class="fa-solid fa-arrow-up text-[16px]"></i>
+</button>
 <!-- footer nav -->
 <nav class="fixed bottom-0 w-full z-50 rounded-t-2xl bg-paper shadow-pop flex justify-around items-center h-20 px-4 pb-2 border-t border-ink/10">
   <a href="index-with-sort.html" class="flex flex-col items-center justify-center bg-brand-600 text-white rounded-full px-6 py-2 active:scale-90 transition-all duration-200">
@@ -411,6 +432,5 @@
     <span class="font-mono text-[10px] mt-1">Profile</span>
   </a>
 </nav>
-
 </body>
 </html>
