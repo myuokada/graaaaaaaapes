@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIM Card 投稿 — Kredo Plus</title>
+
+<!-- Tailwind CDN: ビルド不要、そのままブラウザ / Live Server で確認できます -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink: '#241E1A',
+          cream: '#FBF6EE',
+          paper: '#FFFFFF',
+          brand: {
+            50: '#F1F0FF',
+            100: '#E3E0FF',
+            300: '#A7A0FF',
+            500: '#5A4CFF',
+            600: '#4736F0',
+            700: '#372AC2',
+          },
+          clay: {
+            400: '#E08A5B',
+            500: '#CE7043',
+            600: '#B15A32',
+          },
+        },
+        fontFamily: {
+          display: ['"Fraunces"', 'serif'],
+          body: ['"Inter"', 'sans-serif'],
+          mono: ['"IBM Plex Mono"', 'monospace'],
+        },
+        boxShadow: {
+          card: '0 1px 2px rgba(36,30,26,0.06), 0 8px 24px -12px rgba(36,30,26,0.18)',
+          cardHover: '0 4px 8px rgba(36,30,26,0.08), 0 20px 40px -16px rgba(36,30,26,0.28)',
+          pop: '0 24px 60px -12px rgba(36,30,26,0.35)',
+        }
+      }
+    }
+  }
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+  body { font-family: 'Inter', sans-serif; background: #FBF6EE; }
+  .font-display { font-family: 'Fraunces', serif; }
+  .font-mono { font-family: 'IBM Plex Mono', monospace; }
+
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: #E3E0FF; border-radius: 8px; }
+
+  @keyframes riseIn {
+    from { opacity: 0; transform: translateY(14px) scale(.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .rise-in { animation: riseIn .45s cubic-bezier(.2,.8,.2,1) both; }
+
+  .field-input {
+    width: 100%;
+    background: #FFFFFF;
+    border: 1px solid rgba(36,30,26,0.1);
+    border-radius: 0.75rem;
+    padding: 0.7rem 1rem;
+    font-size: 0.9rem;
+    transition: box-shadow .2s ease, border-color .2s ease;
+  }
+  .field-input:focus {
+    outline: none;
+    border-color: #5A4CFF;
+    box-shadow: 0 0 0 3px rgba(90,76,255,0.15);
+  }
+  .field-input::placeholder { color: rgba(36,30,26,0.35); }
+
+  .image-drop {
+    transition: border-color .2s ease, background .2s ease;
+  }
+  .image-drop:hover, .image-drop.dragover {
+    border-color: #5A4CFF;
+    background: #F1F0FF;
+  }
+
+  .toast {
+    transition: opacity .3s ease, transform .3s ease;
+  }
+
+  /* カテゴリごとの色は --chip-color で指定、activeになった時だけ塗りつぶす */
+  .cat-chip {
+    --chip-color: #4736F0;
+    background: rgba(36,30,26,0.05);
+    color: rgba(36,30,26,0.6);
+    border: 1px solid transparent;
+  }
+  .cat-chip:hover {
+    background: color-mix(in srgb, var(--chip-color) 15%, white);
+    color: var(--chip-color);
+  }
+  .cat-chip.active {
+    background: var(--chip-color);
+    color: #ffffff;
+    box-shadow: 0 4px 10px -4px rgba(0,0,0,0.35);
+  }
+</style>
+</head>
+
+<body class="text-ink">
+
+<div class="min-h-screen flex flex-col">
+
+  <!-- Top bar -->
+  <header class="sticky top-0 z-30 bg-paper/90 backdrop-blur border-b border-ink/10">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="other.html" class="p-2 -ml-2 rounded-lg hover:bg-ink/5 transition-colors" aria-label="戻る">
+          <i class="fa-solid fa-arrow-left text-[18px]"></i>
+        </a>
+        <span class="font-display font-bold text-xl tracking-tight text-brand-600">SIM Card</span>
+      </div>
+      <button class="p-2 rounded-full hover:bg-ink/5" aria-label="削除">
+        <i class="fa-regular fa-trash-can text-clay-500 text-[18px]"></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 py-8">
+    <form id="editForm" class="rise-in space-y-6">
+
+      <!-- Image -->
+      <div>
+        <label class="block text-xs font-mono tracking-[0.1em] text-ink/40 mb-2">Image</label>
+        <label for="imageInput" class="image-drop relative block h-48 sm:h-56 rounded-2xl border-2 border-dashed border-ink/15 overflow-hidden cursor-pointer group">
+          <img id="imagePreview" src="https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover" alt="写真プレビュー">
+          <div class="absolute inset-0 bg-ink/0 group-hover:bg-ink/40 transition-colors flex items-center justify-center">
+            <span class="opacity-0 group-hover:opacity-100 transition-opacity bg-paper/95 px-4 py-2 rounded-full flex items-center gap-2 shadow-pop">
+              <i class="fa-solid fa-camera text-brand-600"></i>
+              <span class="text-sm font-semibold">Edit image</span>
+            </span>
+          </div>
+        </label>
+        <input type="file" id="imageInput" accept="image/*" class="hidden">
+      </div>
+
+      <!-- Category -->
+      <div>
+        <label class="block text-xs font-mono tracking-[0.1em] text-ink/40 mb-2">CATEGORY</label>
+        <div id="categoryChips" class="flex flex-wrap gap-2">
+          <button type="button" data-value="Laundry" style="--chip-color:#F8BA02" class="cat-chip px-4 py-2 rounded-full text-sm font-semibold transition-all">Laundry</button>
+          <button type="button" data-value="Money Exchange" style="--chip-color:#1E9E63" class="cat-chip px-4 py-2 rounded-full text-sm font-semibold transition-all">Money Exchange</button>
+          <button type="button" data-value="SIM Card" style="--chip-color:#2F6FED" class="cat-chip active px-4 py-2 rounded-full text-sm font-semibold transition-all">SIM Card</button>
+          <button type="button" data-value="Hospital" style="--chip-color:#DC4C4C" class="cat-chip px-4 py-2 rounded-full text-sm font-semibold transition-all">Hospital</button>
+          <button type="button" data-value="Others" style="--chip-color:#7C6BA6" class="cat-chip px-4 py-2 rounded-full text-sm font-semibold transition-all">Others</button>
+        </div>
+        <input type="hidden" id="category" value="SIM Card">
+      </div>
+
+      <!-- Title -->
+      <div>
+        <label class="block text-xs font-mono tracking-[0.1em] text-ink/40 mb-2">TITLE</label>
+        <input type="text" id="title" class="field-input" placeholder="例: Prepaid SIM Starter Pack">
+      </div>
+
+      <!-- Description -->
+      <div>
+        <label class="block text-xs font-mono tracking-[0.1em] text-ink/40 mb-2">DESCRIPTION</label>
+        <textarea id="description" rows="4" class="field-input resize-none" placeholder="Describe your store or service."></textarea>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex flex-col gap-3 pt-4">
+        <button type="submit" id="saveBtn" class="w-full h-13 py-3.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-semibold shadow-card active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+          <i class="fa-solid fa-check"></i>
+          <span>SAVE</span>
+        </button>
+      </div>
+
+    </form>
+  </main>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast fixed bottom-6 left-1/2 -translate-x-1/2 opacity-0 translate-y-3 pointer-events-none bg-ink text-white px-5 py-3 rounded-full shadow-pop flex items-center gap-2 z-50">
+  <i class="fa-solid fa-circle-check text-brand-300"></i>
+  <span id="toastText" class="text-sm font-medium">SAVE</span>
+</div>
+
+<script>
+  // カテゴリChipの選択切り替え
+  document.querySelectorAll('.cat-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      document.getElementById('category').value = chip.dataset.value;
+    });
+  });
+
+  // 画像プレビュー切り替え
+  document.getElementById('imageInput').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      document.getElementById('imagePreview').src = URL.createObjectURL(file);
+    }
+  });
+
+  function showToast(text, icon = 'fa-circle-check', iconColor = 'text-brand-300') {
+    const toast = document.getElementById('toast');
+    const toastText = document.getElementById('toastText');
+    const toastIcon = toast.querySelector('i');
+    toastText.textContent = text;
+    toastIcon.className = `fa-solid ${icon} ${iconColor}`;
+    toast.classList.remove('opacity-0', 'translate-y-3', 'pointer-events-none');
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(() => {
+      toast.classList.add('opacity-0', 'translate-y-3', 'pointer-events-none');
+    }, 2200);
+  }
+
+  // 保存
+  document.getElementById('editForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('saveBtn');
+    const original = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Saving...</span>';
+    btn.disabled = true;
+
+    setTimeout(() => {
+      btn.innerHTML = original;
+      btn.disabled = false;
+      showToast('The changes have been saved.');
+    }, 1000);
+  });
+
+  // 削除
+  document.querySelector('header button[aria-label="削除"]').addEventListener('click', () => {
+    if (confirm('この投稿を削除しますか？この操作は取り消せません。')) {
+      showToast('投稿を削除しました', 'fa-trash-can', 'text-clay-500');
+      setTimeout(() => { window.location.href = 'other.html'; }, 1200);
+    }
+  });
+</script>
+
+</body>
+</html>
