@@ -49,7 +49,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
-  body { font-family: 'Inter', sans-serif; background: #FBF6EE; }
+  body { font-family: 'Inter', sans-serif; background: white; }
   .font-display { font-family: 'Fraunces', serif; }
   .font-mono { font-family: 'IBM Plex Mono', monospace; }
 
@@ -87,6 +87,9 @@
 
   #detailModal { transition: opacity .2s ease; }
   #detailModal .modal-panel { transition: transform .28s cubic-bezier(.2,.8,.2,1), opacity .28s ease; }
+
+  #commentList::-webkit-scrollbar { width: 6px; }
+  #commentList::-webkit-scrollbar-thumb { background: #E3E0FF; border-radius: 6px; }
 </style>
 </head>
 
@@ -184,35 +187,82 @@
 
 <!-- Detail modal -->
 <div id="detailModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-ink/40 backdrop-blur-sm">
-  <div class="modal-panel bg-paper rounded-2xl w-full max-w-2xl overflow-hidden shadow-pop opacity-0 translate-y-3">
-    <div class="relative h-64">
+  <div class="modal-panel bg-paper rounded-2xl w-full max-w-3xl overflow-hidden shadow-pop opacity-0 translate-y-3 flex flex-col md:flex-row md:h-[520px]">
+
+    <!-- 左: 写真(固定) -->
+    <div class="relative w-full md:w-1/2 h-64 md:h-full shrink-0">
       <img id="modalImg" src="" class="w-full h-full object-cover" alt="">
       <span id="modalTag" class="absolute top-3 left-3 bg-brand-600 text-white text-[11px] font-semibold px-2.5 py-1 rounded-full"></span>
       <span id="modalPrice" class="absolute bottom-3 right-3 bg-paper/95 font-mono font-semibold text-sm px-2.5 py-1 rounded-lg"></span>
-      <button onclick="closeModal()" class="absolute top-3 right-3 bg-ink/50 hover:bg-ink/70 text-white w-7 h-7 rounded-full flex items-center justify-center" aria-label="閉じる">✕</button>
+      <button onclick="closeModal()" class="md:hidden absolute top-3 right-3 bg-ink/50 hover:bg-ink/70 text-white w-7 h-7 rounded-full flex items-center justify-center" aria-label="閉じる">✕</button>
     </div>
-    <div class="p-5">
-      <h3 id="modalTitle" class="font-display font-semibold text-lg mb-1"></h3>
-      <p id="modalDesc" class="text-sm text-ink/60 mb-4"></p>
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <img id="modalAvatar" src="" class="w-8 h-8 rounded-full object-cover" alt="">
-          <div class="leading-tight">
-            <p id="modalName" class="text-sm font-semibold"></p>
+
+    <!-- 右: ヘッダー + コメント + アクション -->
+    <div class="w-full md:w-1/2 flex flex-col min-h-0">
+
+      <!-- ヘッダー: 投稿者 + 編集/削除ボタン -->
+      <div class="flex items-center justify-between gap-2 px-4 py-3 border-b border-ink/10 shrink-0">
+        <div class="flex items-center gap-2 min-w-0">
+          <img id="modalAvatar" src="" class="w-8 h-8 rounded-full object-cover shrink-0" alt="">
+          <div class="leading-tight min-w-0">
+            <p id="modalName" class="text-sm font-semibold truncate"></p>
             <p id="modalTime" class="text-xs text-ink/40"></p>
           </div>
         </div>
 
-        <!-- 投稿主だけに表示される操作ボタン(アイコンのみ) -->
-        <div id="ownerActions" class="hidden items-center gap-1">
-          <button id="modalEditBtn" class="w-9 h-9 flex items-center justify-center rounded-full text-brand-600 hover:bg-brand-50 transition-colors active:scale-90" aria-label="編集">
-            <i class="fa-solid fa-edit text-[16px]"></i>
-          </button>
-          <button id="modalDeleteBtn" class="w-9 h-9 flex items-center justify-center rounded-full text-clay-600 hover:bg-clay-400/10 transition-colors active:scale-90" aria-label="削除">
-            <i class="fa-solid fa-trash text-[15px]"></i>
+        <div class="flex items-center gap-1 shrink-0">
+          <!-- 投稿主だけに表示される操作ボタン(アイコンのみ) -->
+          <div id="ownerActions" class="hidden items-center gap-1">
+            <button id="modalEditBtn" class="w-8 h-8 flex items-center justify-center rounded-full text-brand-600 hover:bg-brand-50 transition-colors active:scale-90" aria-label="編集">
+              <i class="fa-solid fa-edit text-[15px]"></i>
+            </button>
+            <button id="modalDeleteBtn" class="w-8 h-8 flex items-center justify-center rounded-full text-red-600 hover:bg-red-50 transition-colors active:scale-90" aria-label="削除">
+              <i class="fa-solid fa-trash text-[14px]"></i>
+            </button>
+          </div>
+          <button onclick="closeModal()" class="hidden md:flex w-8 h-8 items-center justify-center rounded-full text-ink/40 hover:bg-ink/5 hover:text-ink transition-colors" aria-label="閉じる">
+            <i class="fa-solid fa-xmark text-[16px]"></i>
           </button>
         </div>
       </div>
+
+      <!-- スクロール領域: タイトル・説明・コメント一覧 -->
+      <div class="flex-1 overflow-y-auto px-4 py-3 min-h-0">
+        <h3 id="modalTitle" class="font-display font-semibold text-lg mb-1"></h3>
+        <p id="modalDesc" class="text-sm text-ink/60 mb-4"></p>
+
+        <p class="text-xs font-mono tracking-[0.1em] text-ink/40 mb-2">COMMENTS</p>
+        <div id="commentList" class="space-y-3"></div>
+      </div>
+
+      <!-- アクションバー: ♡ 💬 保存(左) / 🌐マップ(右) -->
+      <div class="px-4 pt-2 pb-1 border-t border-ink/10 shrink-0">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <button id="modalLikeBtn" class="heart-btn text-ink hover:text-clay-500 transition-colors active:scale-90" aria-label="いいね">
+              <i class="fa-regular fa-heart text-[22px]"></i>
+            </button>
+            <button onclick="document.getElementById('commentInput').focus()" class="text-ink hover:text-brand-600 transition-colors active:scale-90" aria-label="コメント">
+              <i class="fa-regular fa-comment text-[22px]"></i>
+            </button>
+            <button id="modalSaveBtn" class="save-btn text-ink hover:text-brand-600 transition-colors active:scale-90" aria-label="保存">
+              <i class="fa-regular fa-bookmark text-[22px]"></i>
+            </button>
+          </div>
+          <a id="modalMapLink" href="#" target="_blank" class="text-ink hover:text-brand-600 transition-colors active:scale-90" aria-label="マップで見る">
+            <i class="fa-solid fa-globe text-[22px]"></i>
+          </a>
+        </div>
+        <p id="modalLikeCount" class="text-xs font-semibold mt-1.5 mb-2"></p>
+      </div>
+
+      <!-- コメント投稿フォーム -->
+      <form id="commentForm" class="flex items-center gap-2 px-4 py-3 border-t border-ink/10 shrink-0">
+        <input type="text" id="commentInput" class="flex-1 border border-ink/10 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-300" placeholder="コメントを書く...">
+        <button type="submit" class="w-10 h-10 shrink-0 flex items-center justify-center rounded-full bg-brand-600 text-white hover:bg-brand-700 transition-colors active:scale-90">
+          <i class="fa-solid fa-paper-plane text-sm"></i>
+        </button>
+      </form>
     </div>
   </div>
 </div>
@@ -220,33 +270,33 @@
 <script>
   // ---- テストデータ（自由に増減・編集OK） ----
   const items = [
-    { tag: 'Carinderia', title: 'Best Sisig near school', desc: 'Crispy and flavorful sisig perfect with rice. A favorite among students!', price: 150, name: 'Mateo L.', time: '2時間前', likes: 34, img: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=12' },
-    { tag: 'Carinderia', title: 'Lutong Bahay Meals', desc: 'Home-cooked meals like how your mom makes it.', price: 120, name: 'Sophia C.', time: '5時間前', likes: 51, img: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=32' },
-    { tag: 'Carinderia', title: 'Fried Chicken Sarap', desc: 'Juicy fried chicken with special spices.', price: 90, name: 'Juan R.', time: '1日前', likes: 12, img: 'https://images.unsplash.com/photo-1562967914-608f82629710?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=51' },
-    { tag: 'Carinderia', title: 'Pinakbet and More', desc: 'Healthy veggies with a local twist.', price: 110, name: 'Angela M.', time: '1日前', likes: 8, img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=25' },
-    { tag: 'Carinderia', title: 'Grilled Bangus', desc: 'Fresh bangus grilled to perfection.', price: 130, name: 'Daniel L.', time: '2日前', likes: 22, img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=15' },
-    { tag: 'Carinderia', title: 'Bulalo sa Umaga', desc: 'Warm bulalo that heals your soul.', price: 140, name: 'Kim C.', time: '2日前', likes: 45, img: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=44' },
-    { tag: 'Carinderia', title: 'Beef Mami Special', desc: 'Rich broth noodles perfect for rainy days.', price: 80, name: 'Ella R.', time: '3日前', likes: 6, img: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=5' },
-    { tag: 'Carinderia', title: 'Lechon Roll Slices', desc: 'Crispy skin, tender meat, served hot.', price: 160, name: 'Marco T.', time: '4日前', likes: 29, img: 'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=8' },
-    { tag: 'Carinderia', title: 'Longsilog Combo', desc: 'Sweet longganisa with egg and rice.', price: 100, name: 'Rina P.', time: '5日前', likes: 3, img: 'https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=20' },
-    { tag: 'Carinderia', title: 'Best Sisig near school', desc: 'Crispy and flavorful sisig perfect with rice. A favorite among students!', price: 150, name: 'Mateo L.', time: '2時間前', likes: 34, img: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=12' },
-    { tag: 'Carinderia', title: 'Lutong Bahay Meals', desc: 'Home-cooked meals like how your mom makes it.', price: 120, name: 'Sophia C.', time: '5時間前', likes: 51, img: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=32' },
-    { tag: 'Carinderia', title: 'Fried Chicken Sarap', desc: 'Juicy fried chicken with special spices.', price: 90, name: 'Juan R.', time: '1日前', likes: 12, img: 'https://images.unsplash.com/photo-1562967914-608f82629710?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=51' },
-    { tag: 'Carinderia', title: 'Pinakbet and More', desc: 'Healthy veggies with a local twist.', price: 110, name: 'Angela M.', time: '1日前', likes: 8, img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=25' },
-    { tag: 'Carinderia', title: 'Grilled Bangus', desc: 'Fresh bangus grilled to perfection.', price: 130, name: 'Daniel L.', time: '2日前', likes: 22, img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=15' },
-    { tag: 'Carinderia', title: 'Bulalo sa Umaga', desc: 'Warm bulalo that heals your soul.', price: 140, name: 'Kim C.', time: '2日前', likes: 45, img: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=44' },
-    { tag: 'Carinderia', title: 'Beef Mami Special', desc: 'Rich broth noodles perfect for rainy days.', price: 80, name: 'Ella R.', time: '3日前', likes: 6, img: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=5' },
-    { tag: 'Carinderia', title: 'Lechon Roll Slices', desc: 'Crispy skin, tender meat, served hot.', price: 160, name: 'Marco T.', time: '4日前', likes: 29, img: 'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=8' },
-    { tag: 'Carinderia', title: 'Longsilog Combo', desc: 'Sweet longganisa with egg and rice.', price: 100, name: 'Rina P.', time: '5日前', likes: 3, img: 'https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=20' },
-    { tag: 'Carinderia', title: 'Best Sisig near school', desc: 'Crispy and flavorful sisig perfect with rice. A favorite among students!', price: 150, name: 'Mateo L.', time: '2時間前', likes: 34, img: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=12' },
-    { tag: 'Carinderia', title: 'Lutong Bahay Meals', desc: 'Home-cooked meals like how your mom makes it.', price: 120, name: 'Sophia C.', time: '5時間前', likes: 51, img: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=32' },
-    { tag: 'Carinderia', title: 'Fried Chicken Sarap', desc: 'Juicy fried chicken with special spices.', price: 90, name: 'Juan R.', time: '1日前', likes: 12, img: 'https://images.unsplash.com/photo-1562967914-608f82629710?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=51' },
-    { tag: 'Carinderia', title: 'Pinakbet and More', desc: 'Healthy veggies with a local twist.', price: 110, name: 'Angela M.', time: '1日前', likes: 8, img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=25' },
-    { tag: 'Carinderia', title: 'Grilled Bangus', desc: 'Fresh bangus grilled to perfection.', price: 130, name: 'Daniel L.', time: '2日前', likes: 22, img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=15' },
-    { tag: 'Carinderia', title: 'Bulalo sa Umaga', desc: 'Warm bulalo that heals your soul.', price: 140, name: 'Kim C.', time: '2日前', likes: 45, img: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=44' },
-    { tag: 'Carinderia', title: 'Beef Mami Special', desc: 'Rich broth noodles perfect for rainy days.', price: 80, name: 'Ella R.', time: '3日前', likes: 6, img: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=5' },
-    { tag: 'Carinderia', title: 'Lechon Roll Slices', desc: 'Crispy skin, tender meat, served hot.', price: 160, name: 'Marco T.', time: '4日前', likes: 29, img: 'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=8' },
-    { tag: 'Carinderia', title: 'Longsilog Combo', desc: 'Sweet longganisa with egg and rice.', price: 100, name: 'Rina P.', time: '5日前', likes: 3, img: 'https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=20' },
+    { tag: 'Carinderia', title: 'Best Sisig near school', desc: 'Crispy and flavorful sisig perfect with rice. A favorite among students!', price: 150, name: 'Mateo L.', time: '2時間前', likes: 34, img: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=12', comments: [ { name: 'Sophia C.', text: 'これめっちゃ美味しそう!' }, { name: 'Juan R.', text: '今度行ってみます👍' } ] },
+    { tag: 'Carinderia', title: 'Lutong Bahay Meals', desc: 'Home-cooked meals like how your mom makes it.', price: 120, name: 'Sophia C.', time: '5時間前', likes: 51, img: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=32', mapQuery: 'Orange UCMA' },
+    { tag: 'Carinderia', title: 'Fried Chicken Sarap', desc: 'Juicy fried chicken with special spices.', price: 90, name: 'Juan R.', time: '1日前', likes: 12, img: 'https://images.unsplash.com/photo-1562967914-608f82629710?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=51', mapQuery: 'Orange UCMA' },
+    { tag: 'Carinderia', title: 'Pinakbet and More', desc: 'Healthy veggies with a local twist.', price: 110, name: 'Angela M.', time: '1日前', likes: 8, img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=25', mapQuery: 'Orange UCMA' },
+    { tag: 'Carinderia', title: 'Grilled Bangus', desc: 'Fresh bangus grilled to perfection.', price: 130, name: 'Daniel L.', time: '2日前', likes: 22, img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=15', mapQuery: 'Orange UCMA' },
+    { tag: 'Carinderia', title: 'Bulalo sa Umaga', desc: 'Warm bulalo that heals your soul.', price: 140, name: 'Kim C.', time: '2日前', likes: 45, img: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=44', mapQuery: 'Orange UCMA' },
+    { tag: 'Carinderia', title: 'Beef Mami Special', desc: 'Rich broth noodles perfect for rainy days.', price: 80, name: 'Ella R.', time: '3日前', likes: 6, img: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=5', mapQuery: 'Orange UCMA' },
+    { tag: 'Carinderia', title: 'Lechon Roll Slices', desc: 'Crispy skin, tender meat, served hot.', price: 160, name: 'Marco T.', time: '4日前', likes: 29, img: 'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=8', mapQuery: 'Orange UCMA' },
+    { tag: 'Carinderia', title: 'Longsilog Combo', desc: 'Sweet longganisa with egg and rice.', price: 100, name: 'Rina P.', time: '5日前', likes: 3, img: 'https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=20', mapQuery: 'Orange UCMA' },
+    { tag: 'Carinderia', title: 'Best Sisig near school', desc: 'Crispy and flavorful sisig perfect with rice. A favorite among students!', price: 150, name: 'Mateo L.', time: '2時間前', likes: 34, img: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=12', mapQuery: 'Orange UCMA' },
+    { tag: 'Carinderia', title: 'Lutong Bahay Meals', desc: 'Home-cooked meals like how your mom makes it.', price: 120, name: 'Sophia C.', time: '5時間前', likes: 51, img: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=32', mapQuery: 'Orange UCMA' },
+    { tag: 'Carinderia', title: 'Fried Chicken Sarap', desc: 'Juicy fried chicken with special spices.', price: 90, name: 'Juan R.', time: '1日前', likes: 12, img: 'https://images.unsplash.com/photo-1562967914-608f82629710?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=51', mapQuery: 'Orange UCMA' },
+    { tag: 'Carinderia', title: 'Pinakbet and More', desc: 'Healthy veggies with a local twist.', price: 110, name: 'Angela M.', time: '1日前', likes: 8, img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=25', mapQuery: 'Orange UCMA' },
+    { tag: 'Carinderia', title: 'Grilled Bangus', desc: 'Fresh bangus grilled to perfection.', price: 130, name: 'Daniel L.', time: '2日前', likes: 22, img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=15', mapQuery: 'Orange UCMA' },
+    { tag: 'Carinderia', title: 'Bulalo sa Umaga', desc: 'Warm bulalo that heals your soul.', price: 140, name: 'Kim C.', time: '2日前', likes: 45, img: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=44', mapQuery: 'Orange UCMA' },
+    { tag: 'Carinderia', title: 'Beef Mami Special', desc: 'Rich broth noodles perfect for rainy days.', price: 80, name: 'Ella R.', time: '3日前', likes: 6, img: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=5', mapQuery: 'Orange UCMA' },
+    { tag: 'Carinderia', title: 'Lechon Roll Slices', desc: 'Crispy skin, tender meat, served hot.', price: 160, name: 'Marco T.', time: '4日前', likes: 29, img: 'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=8', mapQuery: 'Orange UCMA' },
+    { tag: 'Carinderia', title: 'Longsilog Combo', desc: 'Sweet longganisa with egg and rice.', price: 100, name: 'Rina P.', time: '5日前', likes: 3, img: 'https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=20', mapQuery: 'Orange UCMA' },
+    { tag: 'Carinderia', title: 'Best Sisig near school', desc: 'Crispy and flavorful sisig perfect with rice. A favorite among students!', price: 150, name: 'Mateo L.', time: '2時間前', likes: 34, img: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=12', mapQuery: 'Orange UCMA' },
+    { tag: 'Carinderia', title: 'Lutong Bahay Meals', desc: 'Home-cooked meals like how your mom makes it.', price: 120, name: 'Sophia C.', time: '5時間前', likes: 51, img: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=32', mapQuery: 'Orange UCMA' },
+    { tag: 'Carinderia', title: 'Fried Chicken Sarap', desc: 'Juicy fried chicken with special spices.', price: 90, name: 'Juan R.', time: '1日前', likes: 12, img: 'https://images.unsplash.com/photo-1562967914-608f82629710?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=51', mapQuery: 'Orange UCMA' },
+    { tag: 'Carinderia', title: 'Pinakbet and More', desc: 'Healthy veggies with a local twist.', price: 110, name: 'Angela M.', time: '1日前', likes: 8, img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=25', mapQuery: 'Orange UCMA' },
+    { tag: 'Carinderia', title: 'Grilled Bangus', desc: 'Fresh bangus grilled to perfection.', price: 130, name: 'Daniel L.', time: '2日前', likes: 22, img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=15', mapQuery: 'Orange UCMA' },
+    { tag: 'Carinderia', title: 'Bulalo sa Umaga', desc: 'Warm bulalo that heals your soul.', price: 140, name: 'Kim C.', time: '2日前', likes: 45, img: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=44', mapQuery: 'Orange UCMA' },
+    { tag: 'Carinderia', title: 'Beef Mami Special', desc: 'Rich broth noodles perfect for rainy days.', price: 80, name: 'Ella R.', time: '3日前', likes: 6, img: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=5', mapQuery: 'Orange UCMA' },
+    { tag: 'Carinderia', title: 'Lechon Roll Slices', desc: 'Crispy skin, tender meat, served hot.', price: 160, name: 'Marco T.', time: '4日前', likes: 29, img: 'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=8', mapQuery: 'Orange UCMA' },
+    { tag: 'Carinderia', title: 'Longsilog Combo', desc: 'Sweet longganisa with egg and rice.', price: 100, name: 'Rina P.', time: '5日前', likes: 3, img: 'https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=800&auto=format&fit=crop', avatar: 'https://i.pravatar.cc/64?img=20', mapQuery: 'Orange UCMA' },
   ];
 
   const PAGE_SIZE = 21;
@@ -293,10 +343,18 @@
                 <p class="text-[11px] text-ink/40">${it.time}</p>
               </div>
             </div>
-            <button class="heart-btn shrink-0 p-1.5 rounded-full hover:bg-clay-400/10 flex items-center gap-1" aria-label="お気に入り" onclick="event.stopPropagation(); this.classList.toggle('liked'); this.querySelector('i').classList.toggle('fa-regular'); this.querySelector('i').classList.toggle('fa-solid');">
-              <i class="fa-regular fa-heart text-[18px] text-[#CE7043]"></i>
-              <span class="text-xs text-ink/40 font-mono">${it.likes}</span>
-            </button>
+            <div class="flex items-center gap-0.5 shrink-0">
+              <button class="heart-btn p-1.5 rounded-full hover:bg-clay-400/10 flex items-center gap-1" aria-label="お気に入り" onclick="event.stopPropagation(); this.classList.toggle('liked'); this.querySelector('i').classList.toggle('fa-regular'); this.querySelector('i').classList.toggle('fa-solid');">
+                <i class="fa-regular fa-heart text-[17px] text-[#CE7043]"></i>
+                <span class="text-xs text-ink/40 font-mono">${it.likes}</span>
+              </button>
+              <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(it.mapQuery || it.title)}" target="_blank" onclick="event.stopPropagation()" class="p-1.5 rounded-full hover:bg-brand-50 text-ink/60 hover:text-brand-600 transition-colors" aria-label="マップで見る">
+                <i class="fa-solid fa-globe text-[15px]"></i>
+              </a>
+              <button class="save-btn p-1.5 rounded-full hover:bg-brand-50 text-ink/60 hover:text-brand-600 transition-colors" aria-label="保存" onclick="event.stopPropagation(); this.classList.toggle('saved'); this.querySelector('i').classList.toggle('fa-regular'); this.querySelector('i').classList.toggle('fa-solid');">
+                <i class="fa-regular fa-bookmark text-[15px]"></i>
+              </button>
+            </div>
           </div>
         </div>
       `;
@@ -334,6 +392,31 @@
     currentUser = e.target.value;
   });
 
+  // ---- コメント描画(投稿に紐づくcomments配列を表示、増えたら欄内スクロール) ----
+  function renderComments(it){
+    if (!it.comments) it.comments = [];
+    const list = document.getElementById('commentList');
+    list.innerHTML = '';
+
+    if (it.comments.length === 0) {
+      list.innerHTML = `<p class="text-xs text-ink/30 italic">まだコメントはありません</p>`;
+    } else {
+      it.comments.forEach(c => {
+        const row = document.createElement('div');
+        row.className = 'flex items-start gap-2';
+        row.innerHTML = `
+          <div class="w-6 h-6 rounded-full bg-brand-100 flex items-center justify-center text-[10px] font-semibold text-brand-600 shrink-0">${c.name[0]}</div>
+          <div class="text-xs leading-snug">
+            <span class="font-semibold">${c.name}</span>
+            <span class="text-ink/70"> ${c.text}</span>
+          </div>
+        `;
+        list.appendChild(row);
+      });
+    }
+    list.scrollTop = list.scrollHeight; // 最新コメントが見えるよう自動スクロール
+  }
+
   function openModal(it){
     document.getElementById('modalImg').src = it.img;
     document.getElementById('modalTag').textContent = it.tag;
@@ -343,6 +426,29 @@
     document.getElementById('modalAvatar').src = it.avatar;
     document.getElementById('modalName').textContent = it.name;
     document.getElementById('modalTime').textContent = it.time;
+    document.getElementById('modalLikeCount').textContent = `${it.likes}件のいいね`;
+
+    // マップリンク(とりあえず "Orange UCMA" を仮の検索クエリとして設定)
+    document.getElementById('modalMapLink').href =
+      `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(it.mapQuery || it.title)}`;
+
+    // いいね・保存ボタン(見た目だけのトグル)
+    const likeIcon = document.querySelector('#modalLikeBtn i');
+    likeIcon.className = 'fa-regular fa-heart text-[22px]';
+    document.getElementById('modalLikeBtn').onclick = function(){
+      this.classList.toggle('liked');
+      likeIcon.classList.toggle('fa-regular');
+      likeIcon.classList.toggle('fa-solid');
+      likeIcon.classList.toggle('text-clay-500');
+    };
+    const saveIcon = document.querySelector('#modalSaveBtn i');
+    saveIcon.className = 'fa-regular fa-bookmark text-[22px]';
+    document.getElementById('modalSaveBtn').onclick = function(){
+      this.classList.toggle('saved');
+      saveIcon.classList.toggle('fa-regular');
+      saveIcon.classList.toggle('fa-solid');
+      saveIcon.classList.toggle('text-brand-600');
+    };
 
     // 投稿主(it.name)と今のログインユーザーが一致する時だけ、編集・削除ボタンを表示
     const isOwner = (it.name === currentUser);
@@ -358,6 +464,19 @@
         alert('削除しました(デモ)');
         closeModal();
       }
+    };
+
+    // コメント表示 + 投稿フォームの紐付け
+    renderComments(it);
+    document.getElementById('commentForm').onsubmit = (e) => {
+      e.preventDefault();
+      const input = document.getElementById('commentInput');
+      const text = input.value.trim();
+      if (!text) return;
+      if (!it.comments) it.comments = [];
+      it.comments.push({ name: currentUser === 'Guest' ? 'ゲスト' : currentUser, text });
+      input.value = '';
+      renderComments(it);
     };
 
     const modal = document.getElementById('detailModal');
